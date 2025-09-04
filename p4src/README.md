@@ -18,3 +18,5 @@ To compile the source code (`ids.p4`), run the following command from this direc
 
 ```bash
 p4c -b bmv2 --arch v1model ids.p4 -o .
+```
+This will generate the `ids.json` and `ids.p4i` files in the current directory (`.`). The `ids.json` file is what is loaded into the switch.
