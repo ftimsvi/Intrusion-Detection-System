@@ -20,3 +20,46 @@ To compile the source code (`ids.p4`), run the following command from this direc
 p4c -b bmv2 --arch v1model ids.p4 -o .
 ```
 This will generate the `ids.json` and `ids.p4i` files in the current directory (`.`). The `ids.json` file is what is loaded into the switch.
+
+## Program Overview
+
+### Key Components
+
+1.  **Parser:** Extracts Ethernet, IPv4, TCP/UDP headers, and the first 32 bits of the packet payload.
+2.  **Ingress Processing:**
+    *   **Flow Hashing:** Creates a hash-based flow key from the 5-tuple (src/dst IP, src/dst port, protocol).
+    *   **Signature Matching:** Checks the payload against a table of malicious patterns (`signatures` table).
+    *   **Flow Tracking:** Uses registers to maintain state, count packets, and block flows identified as malicious.
+    *   **Forwarding:** Forwards non-malicious packets based on IPv4 LPM routing (`ipv4_lpm` table).
+3.  **Deparser:** Reassembles the packet for transmission.
+
+### Key Constants & Sizes
+
+*   `PATTERN_WIDTH 32`: The number of payload bits used for signature matching.
+*   `FLOW_ENTRIES 4096`: The size of the registers tracking flows and counters.
+*   `signatures` table: Size 512. Holds patterns to match against.
+*   `ipv4_lpm` table: Size 1024. Standard IPv4 routing table.
+
+### Pipeline Logic
+
+For each IPv4 packet:
+1.  The flow's 5-tuple is hashed to a value between `0` and `FLOW_ENTRIES-1`.
+2.  The program checks if the flow is already blocked.
+3.  If **not blocked**, the payload is checked against the `signatures` table.
+    *   On a **match (signature hit)**: The flow is added to the `blocked_flows` register, and the packet is redirected to a specified port (e.g., for monitoring or quarantine).
+    *   On a **miss**: The packet is forwarded normally based on the `ipv4_lpm` table.
+4.  If **blocked**, the packet is dropped, and a counter for that flow is incremented.
+
+## Modifying the Code
+
+If you change the source code in `ids.p4`, you **must recompile** it using the command above for the changes to take effect.
+
+## Dependencies
+
+*   **Compiler:** [`p4c`](https://github.com/p4lang/p4c)
+*   **Target Architecture:** `v1model` (for BMv2)
+*   **Software Switch:** [`behavioral-model` (bmv2)](https://github.com/p4lang/behavioral-model)
+
+---
+
+*For details on the overall network topology and how to run the complete system, please see the main project README.*
