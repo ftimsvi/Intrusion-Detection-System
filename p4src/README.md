@@ -46,7 +46,7 @@ For each IPv4 packet:
 1.  The flow's 5-tuple is hashed to a value between `0` and `FLOW_ENTRIES-1`.
 2.  The program checks if the flow is already blocked.
 3.  If **not blocked**, the payload is checked against the `signatures` table.
-    *   On a **match (signature hit)**: The flow is added to the `blocked_flows` register, and the packet is redirected to a specified port (e.g., for monitoring or quarantine).
+    *   On a **match (signature hit)**: The flow is added to the `blocked_flows` register, and the **current packet is redirected to the CPU port** (e.g., for control plane monitoring or logging).
     *   On a **miss**: The packet is forwarded normally based on the `ipv4_lpm` table.
 4.  If **blocked**, the packet is dropped, and a counter for that flow is incremented.
 
