@@ -1,7 +1,7 @@
-# 0 "ids.p4"
+# 0 "/home/p4/Intrusion-Detection-System/p4src/ids.p4"
 # 0 "<built-in>"
 # 0 "<command-line>"
-# 1 "ids.p4"
+# 1 "/home/p4/Intrusion-Detection-System/p4src/ids.p4"
 # 1 "/usr/local/share/p4c/p4include/core.p4" 1
 /*
 Copyright 2013-present Barefoot Networks, Inc.
@@ -96,7 +96,7 @@ extern bool static_assert(bool check, string message);
 
 /// Like the above but using a default message.
 extern bool static_assert(bool check);
-# 2 "ids.p4" 2
+# 2 "/home/p4/Intrusion-Detection-System/p4src/ids.p4" 2
 # 1 "/usr/local/share/p4c/p4include/v1model.p4" 1
 /*
 Copyright 2013-present Barefoot Networks, Inc.
@@ -882,7 +882,7 @@ package V1Switch<H, M>(Parser<H, M> p,
                        ComputeChecksum<H, M> ck,
                        Deparser<H> dep
                        );
-# 3 "ids.p4" 2
+# 3 "/home/p4/Intrusion-Detection-System/p4src/ids.p4" 2
 
 const bit<16> TYPE_IPV4 = 0x800;
 const bit<8> TYPE_TCP = 6;
