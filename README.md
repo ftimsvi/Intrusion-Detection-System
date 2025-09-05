@@ -45,3 +45,9 @@ From the Mininet CLI in **Terminal 1**, run the traffic generator on host `h1`:
 ```bash
 mininet> h1 python3 send_traffic.py 10.0.2.2
 ```
+
+## Network Topology
+The project uses a two-tier topology where the central switch `s1` acts as a security choke point.
+![Network Topology](topology.png)
+- **s1 (Core)**: Runs the IDS logic.
+- **s2, s3 (Leaf)**: Handle basic forwarding. All traffic between their hosts must pass through `s1`.
