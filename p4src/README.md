@@ -48,7 +48,7 @@ For each IPv4 packet:
 3.  If **not blocked**, the payload is checked against the `signatures` table.
     *   On a **match (signature hit)**: The flow is added to the `blocked_flows` register, and the **current packet is redirected to the CPU port** (e.g., for control plane monitoring or logging).
     *   On a **miss**: The packet is forwarded normally based on the `ipv4_lpm` table.
-4.  If **blocked**, the packet is dropped, and a counter for that flow is incremented.
+4.  If **blocked**, the packet is then implicitly dropped by the pipeline because no valid egress port is set for it, and a counter for that flow is incremented.
 
 ## Modifying the Code
 
